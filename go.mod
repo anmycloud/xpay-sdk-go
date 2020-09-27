@@ -1,4 +1,4 @@
-module github.com/orth/xpay-sdk-go/v1
+module github.com/orth/xpay-sdk-go
 
 go 1.15
 
