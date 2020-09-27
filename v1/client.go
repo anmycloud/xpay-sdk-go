@@ -22,8 +22,6 @@ import (
 )
 
 const (
-	xpayGateway = "http://127.0.0.1:8100/v1"
-
 	ProductCodeWechatQr      = "1001"
 	ProductCodeAlipayQr      = "2001"
 	ProductCodeIntegrationQr = "4001"
@@ -31,12 +29,13 @@ const (
 
 type Client struct {
 	platformCode  string
+	gateway       string
 	appPrivateKey *rsa.PrivateKey
 	xpayPublicKey *rsa.PublicKey
 	httpClient    *http.Client
 }
 
-func NewClient(platformCode, appPrivateKeyPath, xpayPublicKeyPath string) (*Client, error) {
+func NewClient(platformCode, gateway, appPrivateKeyPath, xpayPublicKeyPath string) (*Client, error) {
 	appPrivateKey, err := loadAppPrivateKey(appPrivateKeyPath)
 	if err != nil {
 		return nil, err
@@ -47,6 +46,7 @@ func NewClient(platformCode, appPrivateKeyPath, xpayPublicKeyPath string) (*Clie
 	}
 	return &Client{
 		platformCode:  platformCode,
+		gateway:       gateway,
 		appPrivateKey: appPrivateKey,
 		xpayPublicKey: xpayPublicKey,
 		httpClient: &http.Client{
@@ -58,7 +58,7 @@ func NewClient(platformCode, appPrivateKeyPath, xpayPublicKeyPath string) (*Clie
 // qr-code trade
 func (c *Client) QrPay(req *QrPayRequest) (*QrPayResponse, error) {
 	r := QrPayResponse{}
-	if err := c.request(req, xpayGateway+"/pay/qr", &r); err != nil {
+	if err := c.request(req, c.gateway+"/pay/qr", &r); err != nil {
 		return nil, err
 	}
 	return &r, nil
@@ -67,7 +67,7 @@ func (c *Client) QrPay(req *QrPayRequest) (*QrPayResponse, error) {
 // trade query
 func (c *Client) Query(req *QueryRequest) (*OrderItem, error) {
 	r := OrderItem{}
-	if err := c.request(req, xpayGateway+"/pay/query", &r); err != nil {
+	if err := c.request(req, c.gateway+"/pay/query", &r); err != nil {
 		return nil, err
 	}
 	return &r, nil
