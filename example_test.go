@@ -6,7 +6,12 @@ import (
 )
 
 func Example() {
-	client, err := NewClient("your platform code", "your app private key path", "xpay's public key path")
+	client, err := NewClient(
+		"your platform code",
+		"xpay's gateway",
+		"your app private key path",
+		"xpay's public key path",
+	)
 	if err != nil {
 		fmt.Printf("%v", err)
 	}
