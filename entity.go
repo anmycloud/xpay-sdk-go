@@ -46,7 +46,8 @@ func (c *Container) ToStringMap() map[string]string {
 
 type QrPayRequest struct {
 	Merchant       string `json:"merchant"`                  //收款商户账号
-	TotalAmount    int    `json:"total_amount"`              //订单金额 分
+	TotalAmount    int64  `json:"total_amount"`              //订单金额 分
+	Currency       string `json:"currency"`                  //币种
 	TradeNo        string `json:"trade_no"`                  //订单号
 	ProductCode    string `json:"product_code"`              //产品编号
 	NotifyUrl      string `json:"notify_url"`                //回调通知url
@@ -65,21 +66,21 @@ type QueryRequest struct {
 }
 
 type OrderItem struct {
-	Merchant       string //收款商户账号
-	OrderNo        string //订单号
-	PlatformCode   string //业务平台编号
-	OutTradeNo     string //业务平台单号
-	RequestNo      string //请求编号
-	ProductCode    string //产品编号
-	BusinessParams string //业务数据 原样返回
-	OrderType      uint8  //订单类型 1支付订单 2退款订单
-	CreatedAt      int64  //创建时间 时间戳 秒
-	FinishTime     int64  //完成时间 时间戳 秒
-	TotalAmount    int    //订单金额
-	Status         uint8  //订单状态 1完成 2未完成
-	Subject        string //订单主题
-	Body           string //订单描述
-	ChannelOrderNo string //支付通道单号
-	Progress       uint8  //支付进度
-	SourceOrderNo  string //退款的源订单号
+	Merchant       string `json:"merchant"`         //收款商户账号
+	OrderNo        string `json:"order_no"`         //订单号
+	PlatformCode   string `json:"platform_code"`    //业务平台编号
+	OutTradeNo     string `json:"out_trade_no"`     //业务平台单号
+	RequestNo      string `json:"request_no"`       //请求编号
+	ProductCode    string `json:"product_code"`     //产品编号
+	BusinessParams string `json:"business_params"`  //业务数据 原样返回
+	OrderType      uint8  `json:"order_type"`       //订单类型 1支付订单 2退款订单
+	CreatedAt      int64  `json:"created_at"`       //创建时间 时间戳 秒
+	FinishTime     int64  `json:"finish_time"`      //完成时间 时间戳 秒
+	TotalAmount    int    `json:"total_amount"`     //订单金额
+	Status         uint8  `json:"status"`           //订单状态 1完成 2未完成
+	Subject        string `json:"subject"`          //订单主题
+	Body           string `json:"body"`             //订单描述
+	ChannelOrderNo string `json:"channel_order_no"` //支付通道单号
+	Progress       string `json:"progress"`         //支付进度
+	SourceOrderNo  string `json:"source_order_no"`  //退款的源订单号
 }
