@@ -27,6 +27,10 @@ const (
 	ProductCodeIntegrationQr = "4001"
 )
 
+var (
+	OrderNotFoundError = errors.New("order not found")
+)
+
 type Client struct {
 	platformCode  string
 	gateway       string
@@ -173,14 +177,17 @@ func (c *Client) request(data interface{}, url string, result interface{}) error
 	if !c.checkSign(&res) {
 		return errors.New("response data sign error")
 	}
-	if res.Code != "0000" {
+	switch res.Code {
+	case "0000":
+		if err := json.Unmarshal([]byte(res.Content), result); err != nil {
+			return fmt.Errorf("%v,(data:%s)", err, res.Content)
+		}
+		return nil
+	case "3001":
+		return OrderNotFoundError
+	default:
 		return fmt.Errorf("ERROR:%s , %s", res.Code, res.Msg)
 	}
-
-	if err := json.Unmarshal([]byte(res.Content), result); err != nil {
-		return fmt.Errorf("%v,(data:%s)", err, res.Content)
-	}
-	return nil
 }
 
 func loadAppPrivateKey(appPrivateKeyPath string) (*rsa.PrivateKey, error) {
